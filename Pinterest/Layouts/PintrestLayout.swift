@@ -64,6 +64,10 @@ class PintrestLayout: UICollectionViewLayout {
   
   // Fucntion recieved from collection view to start preparing layout attributes when layout is invalidated
   override func prepare() {
+
+    super.prepare()
+    cache.removeAll() // When invalidating the layout
+    
     // We only proceed if cache is empty and collection view is not nil
     guard self.cache.isEmpty, let collectionView = collectionView else { return }
     

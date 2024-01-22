@@ -62,7 +62,7 @@ class PintrestLayout: UICollectionViewLayout {
     return CGSize(width: self.contentWidth, height: self.contentHeight)
   }
   
-  // Fucntion recieved from collection view to start preparing layout attributes
+  // Fucntion recieved from collection view to start preparing layout attributes when layout is invalidated
   override func prepare() {
     // We only proceed if cache is empty and collection view is not nil
     guard self.cache.isEmpty, let collectionView = collectionView else { return }
@@ -123,12 +123,22 @@ class PintrestLayout: UICollectionViewLayout {
 
   }
   
-  override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+  override func layoutAttributesForElements(in rect: CGRect)
+      -> [UICollectionViewLayoutAttributes]? {
+    var visibleLayoutAttributes: [UICollectionViewLayoutAttributes] = []
     
+    // Loop through the cache and look for items in the rect that intersects
+    for attributes in cache {
+      if attributes.frame.intersects(rect) {
+        visibleLayoutAttributes.append(attributes)
+      }
+    }
+    return visibleLayoutAttributes
   }
   
-  override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-    
+  override func layoutAttributesForItem(at indexPath: IndexPath)
+      -> UICollectionViewLayoutAttributes? {
+    return cache[indexPath.item]
   }
   
 }

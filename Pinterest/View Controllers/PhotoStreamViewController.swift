@@ -45,6 +45,10 @@ class PhotoStreamViewController: UICollectionViewController {
     }
     collectionView?.backgroundColor = .clear
     collectionView?.contentInset = UIEdgeInsets(top: 23, left: 16, bottom: 10, right: 16)
+    
+    if let layout = collectionView?.collectionViewLayout as? PintrestLayout {
+      layout.delegate = self
+    }
   }
 }
 
@@ -62,5 +66,14 @@ extension PhotoStreamViewController: UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
     let itemSize = (collectionView.frame.width - (collectionView.contentInset.left + collectionView.contentInset.right + 10)) / 2
     return CGSize(width: itemSize, height: itemSize)
+  }
+}
+
+
+extension PhotoStreamViewController: PinterestLayoutDelegate {
+  func collectionView(
+      _ collectionView: UICollectionView,
+      heightForPhotoAtIndexPath indexPath:IndexPath) -> CGFloat {
+    return photos[indexPath.item].image.size.height
   }
 }
